@@ -1,0 +1,19 @@
+.symptom-input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #cce5ff;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.symptom-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.symptom-input::placeholder {
+  color: #6c757d;
+}

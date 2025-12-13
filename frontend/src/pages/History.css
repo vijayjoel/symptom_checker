@@ -1,0 +1,137 @@
+.history-container {
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  min-height: calc(100vh - 70px);
+  background: linear-gradient(135deg, #e6f7ff 0%, #f0f8ff 100%);
+}
+
+.history-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 8px 30px rgba(0, 123, 255, 0.15);
+  max-width: 700px;
+  width: 100%;
+  border: 1px solid rgba(0, 123, 255, 0.1);
+}
+
+.history-card h1 {
+  color: #007bff; /* Medical blue heading */
+  font-size: 2rem;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+}
+
+.empty-state p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.reports-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.report-item {
+  background-color: #f8fbfd; /* Very light blue background for items */
+  border-left: 4px solid #007bff; /* Medical blue left border */
+  padding: 20px;
+  border-radius: 8px;
+  transition: box-shadow 0.3s, transform 0.2s;
+  cursor: pointer; /* Indicate clickable */
+}
+
+.report-item:hover {
+  box-shadow: 0 6px 20px rgba(0, 123, 255, 0.1);
+  transform: translateY(-2px); /* Subtle lift on hover */
+}
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.report-date {
+  font-size: 0.9rem;
+  color: #555; /* Darker gray for readability */
+  font-weight: 500;
+}
+
+.report-risk-badge {
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.report-symptoms {
+  font-size: 0.95rem;
+  color: #333;
+  margin-bottom: 12px;
+}
+
+.report-symptoms strong {
+  color: #007bff; /* Medical blue for strong text */
+}
+
+.report-preview {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.report-preview strong {
+  color: #007bff; /* Medical blue for strong text */
+  display: block;
+  margin-bottom: 8px;
+}
+
+.report-preview p {
+  margin: 0;
+  padding: 10px;
+  background-color: #ffffff; /* White background for preview text */
+  border-radius: 4px;
+  border-left: 3px solid #007bff; /* Medical blue border */
+}
+
+.delete-button {
+  background-color: #dc3545; /* Red for delete */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  margin-top: 15px; /* Add some space above the button */
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+  box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3); /* Subtle red shadow on hover */
+}
+
+@media (max-width: 768px) {
+  .history-container {
+    padding: 20px;
+  }
+
+  .history-card {
+    padding: 20px;
+  }
+
+  .history-card h1 {
+    font-size: 1.5rem;
+  }
+}

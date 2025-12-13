@@ -1,0 +1,72 @@
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  /* Removed background image */
+}
+
+.home-card {
+  background: rgba(255, 255, 255, 0.9); /* Slightly transparent white for a clean medical look */
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15); /* Stronger, more defined shadow */
+  max-width: 600px;
+  width: 100%;
+}
+
+.home-card h1 {
+  color: #007bff; /* Medical blue */
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.subtitle {
+  color: #444; /* Slightly darker for better readability */
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 1rem;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.free-text-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #cce5ff; /* Light blue border */
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  resize: vertical;
+}
+
+.free-text-input:focus {
+  outline: none;
+  border-color: #0056b3; /* Darker medical blue on focus */
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.disclaimer {
+  background-color: #e6f7ff; /* Lighter blue disclaimer background */
+  border-left: 4px solid #007bff; /* Medical blue border */
+  padding: 15px;
+  border-radius: 6px;
+  margin-top: 30px;
+  font-size: 0.9rem;
+  color: #004085; /* Darker blue text for disclaimer */
+  line-height: 1.5;
+  box-shadow: 0 2px 10px rgba(0, 123, 255, 0.1);
+}

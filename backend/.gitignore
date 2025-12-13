@@ -1,0 +1,20 @@
+# dependencies
+/node_modules
+
+# environment variables
+.env
+
+# logs
+*.log
+
+# database files
+/data/*.json
+
+# misc
+.DS_Store
+
+# editor directories and files
+.idea
+.vscode
+*.swp
+*.swo
