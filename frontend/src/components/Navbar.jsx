@@ -34,7 +34,7 @@ export default function Navbar({ currentPage, onNavigate }) {
               className={`nav-link ${currentPage === 'doctor' ? 'active' : ''}`}
               onClick={() => onNavigate('doctor')}
             >
-              👨‍⚕️ Doctor Suggestions
+              👨‍⚕️ Hospital Suggestions
             </button>
           </li>
           <li>
