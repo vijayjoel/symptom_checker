@@ -4,6 +4,7 @@ dotenv.config();
 import express from 'express';
 import cors from 'cors';
 import suggestionsRoutes from './routes/suggestions.js';
+import hospitalsRoutes from './routes/hospitals.js'; // Import new hospitals route
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -14,6 +15,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/suggestions', suggestionsRoutes);
+app.use('/api/hospitals', hospitalsRoutes); // Use new hospitals route
 
 // Health check endpoint
 app.get('/health', (req, res) => {

@@ -2,102 +2,52 @@ import { useState } from 'react';
 import './DoctorSuggestions.css';
 
 export default function DoctorSuggestions() {
-  const [selectedSpecialty, setSelectedSpecialty] = useState('General');
   const [userLocation, setUserLocation] = useState('');
-  const [filteredDoctors, setFilteredDoctors] = useState([]);
+  const [hospitals, setHospitals] = useState([]); // Changed from filteredDoctors
+  const [isLoading, setIsLoading] = useState(false); // New state for loading
+  const [error, setError] = useState(''); // New state for errors
   const [hasSearched, setHasSearched] = useState(false);
 
-  const doctors = {
-    'General': [
-      { id: 1, name: 'Dr. Sarah Johnson', specialty: 'General Practitioner', experience: '10 years', rating: 4.8, phone: '+1-234-567-8901', locations: ['Downtown Clinic', 'Main Street Medical', 'Central Health Center'] },
-      { id: 2, name: 'Dr. Michael Chen', specialty: 'General Practitioner', experience: '15 years', rating: 4.9, phone: '+1-234-567-8902', locations: ['Main Street Medical', 'Park Avenue Clinic', 'Riverside Medical'] },
-    ],
-    'Cardiology': [
-      { id: 3, name: 'Dr. James Wilson', specialty: 'Cardiologist', experience: '12 years', rating: 4.9, phone: '+1-234-567-8903', locations: ['Heart Care Center', 'Downtown Clinic', 'Medical Tower'] },
-      { id: 4, name: 'Dr. Emily Davis', specialty: 'Cardiologist', experience: '8 years', rating: 4.7, phone: '+1-234-567-8904', locations: ['Cardiac Institute', 'Main Street Medical', 'Central Health Center'] },
-    ],
-    'Neurology': [
-      { id: 5, name: 'Dr. Robert Martinez', specialty: 'Neurologist', experience: '14 years', rating: 4.8, phone: '+1-234-567-8905', locations: ['Brain Health Clinic', 'Medical Tower', 'Downtown Clinic'] },
-      { id: 6, name: 'Dr. Lisa Thompson', specialty: 'Neurologist', experience: '11 years', rating: 4.6, phone: '+1-234-567-8906', locations: ['Neuro Center', 'Park Avenue Clinic', 'Riverside Medical'] },
-    ],
-    'Respiratory': [
-      { id: 7, name: 'Dr. David Brown', specialty: 'Pulmonologist', experience: '13 years', rating: 4.8, phone: '+1-234-567-8907', locations: ['Lung Care Clinic', 'Main Street Medical', 'Medical Tower'] },
-      { id: 8, name: 'Dr. Jennifer Lee', specialty: 'Pulmonologist', experience: '9 years', rating: 4.7, phone: '+1-234-567-8908', locations: ['Respiratory Center', 'Downtown Clinic', 'Central Health Center'] },
-    ],
-    'Gastroenterology': [
-      { id: 9, name: 'Dr. William Taylor', specialty: 'Gastroenterologist', experience: '16 years', rating: 4.9, phone: '+1-234-567-8909', locations: ['GI Specialists', 'Main Street Medical', 'Park Avenue Clinic'] },
-      { id: 10, name: 'Dr. Patricia White', specialty: 'Gastroenterologist', experience: '10 years', rating: 4.8, phone: '+1-234-567-8910', locations: ['Digestive Health', 'Medical Tower', 'Riverside Medical'] },
-    ],
-  };
+  // Removed selectedSpecialty and doctors data as we'll fetch hospitals
+  
+  const allLocations = []; // This will be fetched from backend or removed if not needed for hospitals
 
-  const specialties = Object.keys(doctors);
-
-  // Get all unique locations
-  const allLocations = [...new Set(
-    Object.values(doctors).flatMap(doctorList =>
-      doctorList.flatMap(doc => doc.locations)
-    )
-  )].sort();
-
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!userLocation.trim()) {
-      alert('Please enter a location');
+      setError('Please enter a location');
+      setHospitals([]);
+      setHasSearched(false);
       return;
     }
 
-    const currentDoctors = doctors[selectedSpecialty] || [];
-    
-    // Filter doctors by location
-    const filtered = currentDoctors.filter(doctor =>
-      doctor.locations.some(loc =>
-        loc.toLowerCase().includes(userLocation.toLowerCase())
-      )
-    );
-
-    setFilteredDoctors(filtered);
+    setIsLoading(true);
+    setError('');
     setHasSearched(true);
-  };
 
-  const handleSpecialtyChange = (specialty) => {
-    setSelectedSpecialty(specialty);
-    setFilteredDoctors([]);
-    setHasSearched(false);
-    setUserLocation('');
-  };
-
-  const getRiskLevelColor = (level) => {
-    switch(level) {
-      case 'Low':
-        return '#28a745';
-      case 'Medium':
-        return '#ffc107';
-      case 'High':
-        return '#dc3545';
-      default:
-        return '#6c757d';
+    try {
+      const response = await fetch(`http://localhost:4000/api/hospitals?location=${encodeURIComponent(userLocation)}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch hospitals');
+      }
+      const data = await response.json();
+      setHospitals(data.hospitals || []);
+    } catch (err) {
+      setError(err.message || 'An error occurred while fetching hospitals.');
+      setHospitals([]);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  // Removed handleSpecialtyChange and getRiskLevelColor as they are not directly related to hospitals
 
   return (
     <div className="doctor-suggestions-container">
       <div className="doctor-suggestions-card">
-        <h1>Find a Doctor</h1>
-        <p className="subtitle">Connect with qualified healthcare professionals near you</p>
+        <h1>Find Hospitals by Location</h1>
+        <p className="subtitle">Search for hospitals  by entering a location.</p>
 
-        <div className="specialty-selector">
-          <h3>Select Specialty:</h3>
-          <div className="specialty-buttons">
-            {specialties.map((specialty) => (
-              <button
-                key={specialty}
-                className={`specialty-btn ${selectedSpecialty === specialty ? 'active' : ''}`}
-                onClick={() => handleSpecialtyChange(specialty)}
-              >
-                {specialty}
-              </button>
-            ))}
-          </div>
-        </div>
+        {/* Removed specialty selector */}
 
         <div className="location-search-section">
           <h3>Search by Location:</h3>
@@ -106,87 +56,85 @@ export default function DoctorSuggestions() {
               type="text"
               value={userLocation}
               onChange={(e) => setUserLocation(e.target.value)}
-              placeholder="e.g., Downtown Clinic, Main Street, Park Avenue..."
+              placeholder="e.g., hospitals in india  and near your city"
               className="location-input"
               onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
             />
             <button className="search-btn" onClick={handleSearch}>
-              🔍 Search
+              🔍 Search Hospitals
             </button>
           </div>
           
-          {allLocations.length > 0 && (
-            <div className="suggested-locations">
-              <p className="suggestions-label">Suggested locations:</p>
-              <div className="location-tags">
-                {allLocations.map((location) => (
-                  <button
-                    key={location}
-                    className="location-tag"
-                    onClick={() => {
-                      setUserLocation(location);
-                    }}
-                  >
-                    📍 {location}
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
+          {/* Removed suggested locations as we'll fetch from backend */}
         </div>
 
-        <div className="doctors-list">
-          {hasSearched ? (
+        <div className="hospitals-list">
+          {isLoading && <p>Loading hospitals...</p>}
+          {error && <p className="error-message">Error: {error}</p>}
+
+          {!isLoading && !error && hasSearched && (
             <>
-              {filteredDoctors.length === 0 ? (
+              {hospitals.length === 0 ? (
                 <div className="empty-state">
-                  <p>No doctors found in <strong>"{userLocation}"</strong> for <strong>{selectedSpecialty}</strong> specialty.</p>
-                  <p>Try searching for a different location or specialty.</p>
+                  <p>No hospitals found in <strong>"{userLocation}"</strong>.</p>
+                  <p>Try searching for a different location.</p>
                 </div>
               ) : (
                 <>
                   <div className="search-results-info">
-                    Found <strong>{filteredDoctors.length}</strong> doctor(s) in <strong>"{userLocation}"</strong> for <strong>{selectedSpecialty}</strong>
+                    Found <strong>{hospitals.length}</strong> hospital(s) in <strong>"{userLocation}"</strong>
                   </div>
-                  {filteredDoctors.map((doctor) => (
-                    <div key={doctor.id} className="doctor-card">
-                      <div className="doctor-header">
-                        <div className="doctor-info">
-                          <h3 className="doctor-name">{doctor.name}</h3>
-                          <p className="doctor-specialty">{doctor.specialty}</p>
+                  {hospitals.map((hospital) => (
+                    <div key={hospital.id} className="hospital-card">
+                      <div className="hospital-header">
+                        <div className="hospital-info">
+                          <h3 className="hospital-name">{hospital.name}</h3>
+                          {hospital.specialties && hospital.specialties.length > 0 && (
+                            <p className="hospital-specialties">Specialties: {hospital.specialties.join(', ')}</p>
+                          )}
                         </div>
-                        <div className="doctor-rating">
-                          <span className="rating-stars">⭐ {doctor.rating}</span>
-                        </div>
+                        {hospital.rating && (
+                          <div className="hospital-rating">
+                            <span className="rating-stars">⭐ {hospital.rating}</span>
+                          </div>
+                        )}
                       </div>
 
-                      <div className="doctor-details">
-                        <div className="detail-item">
-                          <span className="detail-label">📅 Experience:</span>
-                          <span className="detail-value">{doctor.experience}</span>
-                        </div>
-                        <div className="detail-item">
-                          <span className="detail-label">📍 Available Locations:</span>
-                          <span className="detail-value">{doctor.locations.join(', ')}</span>
-                        </div>
-                        <div className="detail-item">
-                          <span className="detail-label">📞 Phone:</span>
-                          <span className="detail-value">{doctor.phone}</span>
-                        </div>
+                      <div className="hospital-details">
+                        {hospital.address && (
+                          <div className="detail-item">
+                            <span className="detail-label">📍 Address:</span>
+                            <span className="detail-value">{hospital.address}</span>
+                          </div>
+                        )}
+                        {hospital.phone && (
+                          <div className="detail-item">
+                            <span className="detail-label">📞 Phone:</span>
+                            <span className="detail-value">{hospital.phone}</span>
+                          </div>
+                        )}
+                        {hospital.website && (
+                          <div className="detail-item">
+                            <span className="detail-label">🌐 Website:</span>
+                            <a href={hospital.website} target="_blank" rel="noopener noreferrer" className="detail-value">{hospital.website}</a>
+                          </div>
+                        )}
                       </div>
 
-                      <div className="doctor-actions">
-                        <button className="btn-appointment">Book Appointment</button>
-                        <button className="btn-call">Call Now</button>
+                      <div className="hospital-actions">
+                        {hospital.phone && <button className="btn-call">Call Hospital</button>}
+                        {hospital.website && <button className="btn-website" onClick={() => window.open(hospital.website, '_blank')}>Visit Website</button>}
                       </div>
                     </div>
                   ))}
                 </>
               )}
             </>
-          ) : (
+          )}
+
+          {!isLoading && !error && !hasSearched && (
             <div className="empty-state">
-              <p>👆 Select a specialty and enter your location to find doctors near you.</p>
+              <p>👆 Enter a location to find hospitals near you.</p>
             </div>
           )}
         </div>
