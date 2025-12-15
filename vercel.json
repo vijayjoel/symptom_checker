@@ -16,10 +16,10 @@
       "use": "@vercel/node"
     },
     {
-      "src": "frontend/",
+      "src": "frontend/**",
       "use": "@vercel/static-build",
       "config": {
-        "distDir": "frontend/dist"
+        "rootDirectory": "frontend"
       }
     }
   ],
