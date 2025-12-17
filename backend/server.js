@@ -29,8 +29,8 @@ app.use(
     origin:
       process.env.NODE_ENV === "production"
         ? [
-            "https://checking-frontend-17g6iyxiw-anirudhvasudev23s-projects.vercel.app",
-            "https://checking-frontend.vercel.app", // Add your production domain
+            
+            "https://symptom-checker-frontend-one.vercel.app/", // Add your production domain
             /\.vercel\.app$/, // Allow all Vercel preview deployments
           ]
         : ["http://localhost:5173", "http://localhost:5174"],
