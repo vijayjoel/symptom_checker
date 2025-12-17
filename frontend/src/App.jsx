@@ -66,6 +66,25 @@ export default function App() {
       setRiskLevel(data.riskLevel);
       setDisclaimer(data.disclaimer);
       setUserInput(data.userInput);
+
+      // Save to localStorage
+      const newReport = {
+        id: Date.now().toString(),
+        userId: userId,
+        userInput: data.userInput,
+        symptoms: data.userInput,
+        riskLevel: data.riskLevel,
+        suggestions: data.suggestions,
+        disclaimer: data.disclaimer,
+        timestamp: new Date().toISOString(),
+      };
+
+      const existingReports = JSON.parse(
+        localStorage.getItem("symptomReports") || "[]"
+      );
+      existingReports.push(newReport);
+      localStorage.setItem("symptomReports", JSON.stringify(existingReports));
+
       navigateTo("results"); // Use navigateTo instead of setCurrentPage
     } catch (err) {
       setError(err.message || "An error occurred");
@@ -74,17 +93,18 @@ export default function App() {
     }
   };
 
-  const handleViewHistory = async () => {
+  const handleViewHistory = () => {
     setIsLoading(true);
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/suggestions/history?userId=${userId}`
+      // Get reports from localStorage
+      const allReports = JSON.parse(
+        localStorage.getItem("symptomReports") || "[]"
       );
-      if (!response.ok) {
-        throw new Error("Failed to fetch history");
-      }
-      const data = await response.json();
-      setReports(data.reports);
+      // Filter by current userId
+      const userReports = allReports.filter(
+        (report) => report.userId === userId
+      );
+      setReports(userReports);
       navigateTo("history"); // Use navigateTo instead of setCurrentPage
     } catch (err) {
       setError(err.message);
@@ -93,17 +113,18 @@ export default function App() {
     }
   };
 
-  const handleDeleteReport = async (reportId) => {
+  const handleDeleteReport = (reportId) => {
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/suggestions/${reportId}`,
-        {
-          method: "DELETE",
-        }
+      // Remove from localStorage
+      const allReports = JSON.parse(
+        localStorage.getItem("symptomReports") || "[]"
       );
-      if (!response.ok) {
-        throw new Error("Failed to delete report");
-      }
+      const updatedReports = allReports.filter(
+        (report) => report.id !== reportId
+      );
+      localStorage.setItem("symptomReports", JSON.stringify(updatedReports));
+
+      // Update state
       setReports(reports.filter((r) => r.id !== reportId));
     } catch (err) {
       setError(err.message);
